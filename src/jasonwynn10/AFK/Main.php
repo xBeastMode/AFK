@@ -22,7 +22,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 
 
 
-class main extends PluginBase{
+class Main extends PluginBase{
 
     public function onEnable(){
         $this->getLogger()->info(Color::GREEN."[TutorialPlugin] Enabled!");
