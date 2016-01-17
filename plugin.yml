@@ -1,15 +1,15 @@
 name: AFK
-main: jasonwynn10\AFK\Main
+main: jasonwynn10/AFK/main
 version: 1.0.0
 api: 1.13.1
 description: AFK program for MCPE
 
 commands:
     afk:
-        description: "Puts player into AFK mode"
+        description: "Puts player into AFK mode or puts player back into normal mode"
         permission: afk.cmd
 
 permissions:
     afk.cmd:
         default: true
-        description: "Puts player into AFK mode"
+        description: "Puts player into AFK mode or back into normal mode"
