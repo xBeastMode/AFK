@@ -30,6 +30,11 @@ class Main extends PluginBase{
         $this->getLogger()->info(Color::GREEN . "[TutorialPlugin] Enabled!");
     }
 
+    public function __construct() 
+    {
+        $this->god = true;
+    }
+
     public function onCommand(CommandSender $sender, Command $command, $label, array $args)
     {
         if ($sender instanceof Player) {
@@ -38,7 +43,6 @@ class Main extends PluginBase{
                     $sender->sendMessage(Color::GREEN . "[AFK plugin] You are now AFK!");
                     $sender->setHealth(20);
                     $sender->getEffect(10);
-                    $this->god = true;
                     return;
                 } else {
                     $sender->sendMessage(Color::GREEN . "[AFK plugin] This command has no arguments!");
