@@ -3,9 +3,9 @@
  * Created by developer: jasonwynn10.
  */
 
-namespace AFK;
+namespace jasonwynn10\AFK;
 
-use Pocketmine\plugin\PluginBase;
+use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as Color;
