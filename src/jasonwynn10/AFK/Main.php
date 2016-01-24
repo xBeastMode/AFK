@@ -3,7 +3,7 @@
  * Created by developer: jasonwynn10.
  */
 
-namespace jasonwynn10\AFK;
+namespace AFK;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
@@ -11,53 +11,43 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as Color;
 use pocketmine\Server;
 use pocketmine\Player;
-use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\Listener;
-use pocketmine\event\Cancellable;
-use pocketmine\level\Position;
 use pocketmine\level\Level;
-use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
-use pocketmine\event\player\PlayerGameModeChangeEvent;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 
-
-class Main extends PluginBase{
-
-    public function onEnable()
-    {
-        $this->getLogger()->info(Color::GREEN . "[TutorialPlugin] Enabled!");
+class Main extends PluginBase implements Listener {
+    public function onEnable() {
+        $this->enabled = true;
+        $this->getServer()->getPluginManager()->registerEvents($this,$this);
     }
-
-    public function __construct() 
-    {
-        $this->god = true;
-    }
-
-    public function onCommand(CommandSender $sender, Command $command, $label, array $args)
-    {
-        if ($sender instanceof Player) {
-            if (strtolower($command->getName()) == "afk") {
-                if (count($args) < 1) {
-                    $sender->sendMessage(Color::GREEN . "[AFK plugin] You are now AFK!");
-                    $sender->setHealth(20);
-                    $sender->getEffect(10);
-                    return;
+    public function onCommand(CommandSender $issuer,Command $cmd,$label,array $args) {
+        if(strtolower($cmd->getName()) == "afk" ) {
+            if($issuer->hasPermission("afk") or $issuer->hasPermission("afk.toggle")) {
+                $this->enabled = false;
+                if($this->enabled) {
+                    $issuer->sendMessage(Color::YELLOW . "You are now AFK");
                 } else {
-                    $sender->sendMessage(Color::GREEN . "[AFK plugin] This command has no arguments!");
-                    return;
+                    $issuer->sendMessage(Color::YELLOW . "You are no longer AFK");
                 }
             }
+            return true;
         } else {
-            $sender->sendMessage(Color::RED . "That command can only be run in console!");
-            return;
+            return false;
         }
     }
-
-    public function entityDamage(EntityDamageEvent $event) {
-        if($this->god == true) {
-            $event->setCancelled(true);
+    /**
+     * @param EntityDamageEvent $event
+     *
+     * @priority HIGHEST
+     * @ignoreCancelled true
+     */
+    public function onHurt(EntityDamageEvent $event) {
+        $entity = $event->getEntity();
+        if(($entity instanceof Player) && ($this->enabled == true)) {
+            $event->setCancelled();
         }
     }
 }
+
+?>
