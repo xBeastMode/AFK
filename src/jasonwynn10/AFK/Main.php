@@ -18,15 +18,16 @@ use pocketmine\event\entity\EntityDamageEvent;
 
 class Main extends PluginBase implements Listener {
     public function onEnable() {
-        $this->enabled = true;
+        $this->isEnabled();
         $this->getServer()->getPluginManager()->registerEvents($this,$this);
     }
     public function onCommand(CommandSender $issuer,Command $cmd,$label,array $args) {
         if(strtolower($cmd->getName()) == "afk" ) {
             if($issuer->hasPermission("afk") or $issuer->hasPermission("afk.toggle")) {
-                $this->enabled = false;
-                if($this->enabled) {
+                $this->setEnabled();
+                if($this->isEnabled()) {
                     $issuer->sendMessage(Color::YELLOW . "You are now AFK");
+                    $this->isDisabled();
                 } else {
                     $issuer->sendMessage(Color::YELLOW . "You are no longer AFK");
                 }
@@ -44,7 +45,7 @@ class Main extends PluginBase implements Listener {
      */
     public function onHurt(EntityDamageEvent $event) {
         $entity = $event->getEntity();
-        if(($entity instanceof Player) && ($this->enabled == true)) {
+        if(($entity instanceof Player) && ($this->isEnabled() == true)) {
             $event->setCancelled();
         }
     }
