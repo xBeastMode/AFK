@@ -15,6 +15,8 @@ use pocketmine\event\Listener;
 use pocketmine\level\Level;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageEvent;
+use pocketmine\event\player\PlayerMoveEvent;
+use pocketmine\event\entity\EntityMoveEvent;
 
 class Main extends PluginBase implements Listener {
     public function onEnable() {
@@ -48,6 +50,13 @@ class Main extends PluginBase implements Listener {
         if(($entity instanceof Player) && ($this->isEnabled() == true)) {
             $event->setCancelled();
         }
+        
+    public function onMove(EntityMoveEvent $event) {
+        $entity = $event->getEntity();
+        if(($entity instanceof Player) && ($this->isEnabled() == true)) {
+            $event->setCancelled();
+        }
+        
     }
 }
 
