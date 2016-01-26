@@ -36,28 +36,19 @@
               }
           }
       }
-    /**
-     * @param EntityDamageEvent $event
-     */
-      public function onHurt(EntityDamageEvent $event) {
-          $entity = $event->getEntity();
-          if (($entity instanceof Player) && ($this->isEnabled() == true)) {
+
+      public function onHurt(PlayerDamageEvent $event) {
+          if ($this->isEnabled() == true) {
               $event->setCancelled();
           }
       }
 
-    /**
-     * @param PlayerMoveEvent $event
-     */
       public function onMove(PlayerMoveEvent $event) {
           if ($this->isEnabled() == true) {
               $event->setCancelled();
           }
       }
 
-    /**
-     * @param PlayerDeathEvent $event
-     */
       public function onDeath(PlayerDeathEvent $event) {
           if($this->isEnabled() == true) {
               $event->setCancelled();
