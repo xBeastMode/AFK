@@ -23,6 +23,11 @@
         $this->isEnabled();
         $this->getServer()->getPluginManager()->registerEvents($this,$this);
       }
+      
+      public function _construct(Player $entity, array $drops, $deathMessage) {
+        $deathMessage = "You can't die in AFK mode!";
+        $this->setDeathMessage($deathMessage);
+      }
 
       public function onCommand(CommandSender $sender,Command $cmd,$label,array $args) {
           if(strtolower($cmd->getName()) == "afk" ) {
@@ -34,6 +39,10 @@
                   $this->setEnabled();
                   $this->getServer()->broadcastMessage(Color::YELLOW . $player_name . " is now AFK");
               }
+          }
+          if(strtolower($cmd->getName()) == "kill" ) {
+            $deathMessage = "You can't die in AFK mode!";
+            $this->setDeathMessage($deathMessage);
           }
       }
 
