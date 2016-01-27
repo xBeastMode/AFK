@@ -6,11 +6,9 @@
   use pocketmine\command\Command;
   use pocketmine\command\CommandSender;
   use pocketmine\utils\TextFormat as Color;
-  use pocketmine\Server;
   use pocketmine\Player;
   use pocketmine\event\Listener;
   use pocketmine\level\Level;
-  use pocketmine\entity\Entity;
   use pocketmine\event\entity\EntityDamageEvent;
   use pocketmine\event\player\PlayerMoveEvent;
   use pocketmine\event\player\PlayerDeathEvent;
@@ -19,45 +17,68 @@
 
   class Main extends PluginBase implements Listener {
     
+      private $afk = [];
+    
       public function onEnable() {
-        $this->isEnabled();
-        $this->getServer()->getPluginManager()->registerEvents($this,$this);
+        $this->getServer()->getPluginManager()->registerEvents($this, $this);
+      }
+      
+      private function isAFK($p){
+        if($p instanceof Player){
+          $p = $p->getName();
+        }
+        $this->afk[] = $p;
+        return in_array($p, $this->afk);
+      }
+      
+      private function enableAFK($p){
+        if($p instanceof Player){
+          $p = $p->getName();
+        }
+        $this->afk[] = $p;
+      }
+      
+      private function disableAFK($p){
+        if($p instanceof Player){
+          $p = $p->getName();
+        }
+        if(($key = array_search($p, $This->afk)) !== null){
+          unset($this->afk[$key]);
+        }
       }
 
-      public function onCommand(CommandSender $sender,Command $cmd,$label,array $args) {
-          if(strtolower($cmd->getName()) == "afk" ) {
-              $player_name = $this->getName();
-              if($this->isEnabled()) {
-                  $this->getServer()->broadcastMessage(Color::YELLOW . $player_name . " is no longer AFK");
-                  $this->isDisabled();
-                } else {
-                  $this->setEnabled();
-                  $this->getServer()->broadcastMessage(Color::YELLOW . $player_name . " is now AFK");
+      public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
+          if(strtolower($cmd->getName()) === "afk"){
+              $name = $sender->getName();
+              if($this->isAFK($name)){
+                  $this->disableAFK($name);
+                  $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+              }else{
+                  $this->enableAFK($name);
+                  $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
               }
           }
       }
-      public function onHurt(PlayerDamageEvent $event) {
-          if ($this->isEnabled() == true) {
-              $event->setCancelled();
+      
+      public function onHurt(EntityDamageEvent $event) {
+          $entity = $event->getEntity();
+          if(!($entity instanceof Player)) return;
+          if($this->isAFK($entity->getName())){
+            $event->setCancelled();
           }
       }
 
       public function onMove(PlayerMoveEvent $event) {
-          if ($this->isEnabled() == true) {
-              $event->setCancelled();
+          $p = $event->getPlayer());
+          if($this->isAFK($p->getName())){
+            $event->setCancelled();
           }
       }
-
-      public function onDeath(PlayerDeathEvent $event) {
-          if($this->isEnabled() == true) {
-              $event->setCancelled();
-
-          }
-      }
-
+      
       public function onDrop(PlayerDropItemEvent $event) {
-          if($this->isEnabled() == true) {
-              $event->setCancelled();
+          $p = $event->getPlayer());
+          if($this->isAFK($p->getName())){
+            $event->setCancelled();
           }
       }
   }
