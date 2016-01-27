@@ -56,23 +56,23 @@ class Main extends PluginBase implements Listener {
 
     public function onHurt(EntityDamageEvent $event) {
         $entity = $event->getEntity();
-        if(!($entity instanceof Player)) return;
-        if($this->isAFK($entity->getName())){
+        if(!($entity instanceof Player)) {return;}
+        elseif($this->isAFK($entity->getName())){
             $event->setCancelled();
         }
     }
     public function onMove(PlayerMoveEvent $event) {
         $p = $event->getPlayer();
-          if($this->isAFK($p->getName())){
+            if($this->isAFK($p->getName())){
               $event->setCancelled();
-          }
-      }
+            }
+    }
 
     public function onDrop(PlayerDropItemEvent $event) {
         $p = $event->getPlayer();
-          if($this->isAFK($p->getName())){
+            if($this->isAFK($p->getName())){
               $event->setCancelled();
-          }
-      }
+            }
+    }
 }
 ?>
