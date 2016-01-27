@@ -5,12 +5,13 @@ use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as Color;
 use pocketmine\Player;
+
 use pocketmine\event\Listener;
-use pocketmine\level\Level;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
-class Main extends PluginBase implements Listener {
+
+class Main extends PluginBase implements Listener{
 
     private $afk = [];
 
@@ -56,23 +57,23 @@ class Main extends PluginBase implements Listener {
 
     public function onHurt(EntityDamageEvent $event) {
         $entity = $event->getEntity();
-        if(!($entity instanceof Player)) {return;}
-        elseif($this->isAFK($entity->getName())){
+        if(!($entity instanceof Player)) return; //This works too
+        if($this->isAFK($entity->getName())){
             $event->setCancelled();
         }
     }
     public function onMove(PlayerMoveEvent $event) {
         $p = $event->getPlayer();
-            if($this->isAFK($p->getName())){
-              $event->setCancelled();
-            }
+        if($this->isAFK($p->getName())){
+            $event->setCancelled();
+        }
     }
 
     public function onDrop(PlayerDropItemEvent $event) {
         $p = $event->getPlayer();
-            if($this->isAFK($p->getName())){
-              $event->setCancelled();
-            }
+        if($this->isAFK($p->getName())){
+            $event->setCancelled();
+        }
     }
 }
 ?>
