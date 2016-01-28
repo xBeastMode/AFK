@@ -6,6 +6,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\utils\TextFormat as Color;
 use pocketmine\Player;
 
+//use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -19,25 +20,37 @@ class Main extends PluginBase implements Listener{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
     }
 
-    private function isAFK($p){
-        if($p instanceof Player){
-            $p = $p->getName();
+    public function onHurt(EntityDamageEvent $event) {
+        $entity = $event->getEntity();
+        if(!($entity instanceof Player)) return;
+        if($this->isAFK($entity->getName())){
+            $event->setCancelled();
         }
+    }
+    public function onMove(PlayerMoveEvent $event) {
+        $p = $event->getPlayer();
+        if($this->isAFK($p->getName())){
+            $event->setCancelled();
+        }
+    }
+
+    public function onDrop(PlayerDropItemEvent $event) {
+        $p = $event->getPlayer();
+        if($this->isAFK($p->getName())){
+            $event->setCancelled();
+        }
+    }
+
+    private function isAFK($p){
         $this->afk[] = $p;
         return in_array($p, $this->afk);
     }
 
     private function enableAFK($p){
-        if($p instanceof Player){
-            $p = $p->getName();
-        }
         $this->afk[] = $p;
     }
 
     private function disableAFK($p){
-        if($p instanceof Player){
-            $p = $p->getName();
-        }
         if(($key = array_search($p, $this->afk)) !== null){
             unset($this->afk[$key]);
         }
@@ -56,27 +69,6 @@ class Main extends PluginBase implements Listener{
             }else{
                 $sender->sendMessage(Color::YELLOW . "Console cannot use the AFK command!");
             }
-        }
-    }
-
-    public function onHurt(EntityDamageEvent $event) {
-        $entity = $event->getEntity();
-        if(!($entity instanceof Player)) return; //This works too
-        if($this->isAFK($entity->getName())){
-            $event->setCancelled();
-        }
-    }
-    public function onMove(PlayerMoveEvent $event) {
-        $p = $event->getPlayer();
-        if($this->isAFK($p->getName())){
-            $event->setCancelled();
-        }
-    }
-
-    public function onDrop(PlayerDropItemEvent $event) {
-        $p = $event->getPlayer();
-        if($this->isAFK($p->getName())){
-            $event->setCancelled();
         }
     }
 }
