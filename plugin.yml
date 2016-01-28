@@ -1,5 +1,5 @@
 name: AFK
-main: AFK/Main
+main: AFK\Main
 version: 1.0.0
 api: 1.13.1
 description: AFK program for MCPE
