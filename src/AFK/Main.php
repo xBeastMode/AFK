@@ -44,13 +44,16 @@ class Main extends PluginBase implements Listener{
     }
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
         if(strtolower($cmd->getName()) === "afk"){
-            $name = $sender->getName();
-            if($this->isAFK($name)){
-                $this->disableAFK($name);
-                $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
-            }else{
-                $this->enableAFK($name);
-                $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                if(!($sender == Player)){
+                    $name = $sender->getName();
+                    if($this->isAFK($name)){
+                        $this->disableAFK($name);
+                        $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+                    }else{
+                        $this->enableAFK($name);
+                       $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                    }
+                }
             }
         }
     }
