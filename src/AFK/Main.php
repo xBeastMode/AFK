@@ -1,6 +1,6 @@
 <?php
 namespace AFK;
-
+// AFK v1.0.3
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -62,7 +62,6 @@ class Main extends PluginBase implements Listener{
             unset($this->afk[$key]);
         }
     }
-<<<<<<< HEAD
 
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
         if(strtolower($cmd->getName()) === "afk"){
@@ -88,22 +87,6 @@ class Main extends PluginBase implements Listener{
                     $this->enableAFK($name);
                     $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
                 }
-=======
-    
-    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
-        if(strtolower($cmd->getName()) === "afk"){
-            if($sender instanceof Player) {
-                $name = $sender->getName();
-                if ($this->isAFK($name)) {
-                    $this->disableAFK($name);
-                    $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
-                } else {
-                    $this->enableAFK($name);
-                    $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
-                }
-            }else{
-                $sender->sendMessage(Color::YELLOW . "Console cannot use the AFK command!");
->>>>>>> origin/master
             }
         }
     }
