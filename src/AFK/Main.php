@@ -1,6 +1,6 @@
 <?php
 namespace AFK;
-// AFK v1.2.0
+// AFK v1.2.1
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -16,7 +16,6 @@ class Main extends PluginBase implements Listener{
     private $afk = [];
 
     public function onEnable() {
-        $this->checkConfig();
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         $this->MoveTimeout();
     }
@@ -30,32 +29,9 @@ class Main extends PluginBase implements Listener{
     }
 
     public function MoveTimeout() {
-        if(!is_numeric($this->getConfig()->get("Scan-Interval")) or !in_array($this->getConfig()->get("Scan-Interval"), range(1, 30)))
-        {
-            $time = 5;
-            $this->getLogger()->info(Color::GREEN."[AFK Kick] ".Color::RED."Invalid Scan-Interval set in config. Check time set to 5 seconds.");
-        }else{
-            $time = $this->getConfig()->get("Scan-Interval");
-        }
-        $this->getServer()->getScheduler()->scheduleRepeatingTask(new AFKTimer($this), $time);
+        $time=5;
+        $this->getServer()->getScheduler()->scheduleRepeatingTask(new AFKTimeout($this), $time);
 
-    }
-
-    public function checkConfig()
-    {
-        if(!file_exists($this->getDataFolder() . "config.yml"))
-        {
-            @mkdir($this->getDataFolder());
-            file_put_contents($this->getDataFolder() . "config.yml",$this->getResource("config.yml"));
-            return;
-        }
-        if($this->getConfig()->get("Version") == null || $this->getConfig()->get("Version") != "1.1")
-        {
-            $this->getLogger()->info(Color::GREEN."[AFK Kick] ".Color::RED ."An invalid config file was found, generating a new one...");
-
-            unlink($this->getDataFolder() . "config.yml");
-            file_put_contents($this->getDataFolder() . "config.yml",$this->getResource("config.yml"));
-        }
     }
 
     public function onMove(PlayerMoveEvent $event) {

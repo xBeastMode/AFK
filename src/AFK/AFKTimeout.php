@@ -1,8 +1,9 @@
 <?php
 namespace AFK;
 use pocketmine\scheduler\PluginTask;
+use pocketmine\level\Level;
 
-class AFKTimer extends PluginTask {
+class AFKTimeout extends PluginTask {
 
     public function __construct(Main $plugin) {
         parent::__construct($plugin);
