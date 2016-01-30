@@ -27,6 +27,14 @@ class Main extends PluginBase implements Listener{
             $event->setCancelled();
         }
     }
+
+/*    public function isMoving(PlayerMoveEvent $event) {
+        $p = $event->getPlayer()->getName();
+        if(!($event)){
+
+        }
+    }
+*/
     public function onMove(PlayerMoveEvent $event) {
         $p = $event->getPlayer()->getName();
         if($this->isAFK($p)){
@@ -54,6 +62,33 @@ class Main extends PluginBase implements Listener{
             unset($this->afk[$key]);
         }
     }
+<<<<<<< HEAD
+
+    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
+        if(strtolower($cmd->getName()) === "afk"){
+            if(count($args) === 0) {
+                if($sender instanceof Player) {
+                    $name = $sender->getName();
+                    if ($this->isAFK($name)) {
+                        $this->disableAFK($name);
+                        $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+                    } else {
+                        $this->enableAFK($name);
+                        $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                    }
+                }else{
+                    $sender->sendMessage(Color::YELLOW . "Console cannot use the AFK command!");
+                }
+            }else{
+                $name = $args[0];
+                if ($this->isAFK($name)) {
+                    $this->disableAFK($name);
+                    $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+                } else {
+                    $this->enableAFK($name);
+                    $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                }
+=======
     
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
         if(strtolower($cmd->getName()) === "afk"){
@@ -68,6 +103,7 @@ class Main extends PluginBase implements Listener{
                 }
             }else{
                 $sender->sendMessage(Color::YELLOW . "Console cannot use the AFK command!");
+>>>>>>> origin/master
             }
         }
     }
