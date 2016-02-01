@@ -1,7 +1,6 @@
 <?php
 namespace AFK;
 use pocketmine\scheduler\PluginTask;
-use pocketmine\level\Level;
 
 class AFKTimeout extends PluginTask {
 
@@ -11,8 +10,7 @@ class AFKTimeout extends PluginTask {
     }
 
     public function onRun($currentTick) {
-
-        foreach($this->plugin->getServer()->getOnlinePlayers() as $p) {
+        foreach($this->getOwner()->getServer()->getOnlinePlayers() as $p) {
             if(!isset($this->plugin->time[$p->getName()])) {
                 $this->plugin->setTime($p);
             }
