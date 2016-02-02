@@ -41,7 +41,7 @@ class Main extends PluginBase implements Listener {
 
     public function onMove(PlayerMoveEvent $event) {
         $p = $event->getPlayer()->getName();
-        if ($this->isAFK($p)) {
+        if ($this->isAFK($p) && !isset(time[$p])) ) {
             $event->setCancelled();
         }
     }
