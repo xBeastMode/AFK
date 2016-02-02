@@ -1,6 +1,6 @@
 <?php
 namespace AFK;
-// AFK v1.2.8
+// AFK v1.2.8.5
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
