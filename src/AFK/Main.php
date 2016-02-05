@@ -18,7 +18,7 @@ class Main extends PluginBase implements Listener {
 
     public function onEnable() {
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        $this->MoveTimeout();
+        $this->moveTimeout();
     }
 
     public function onHurt(EntityDamageEvent $event) {
@@ -29,9 +29,10 @@ class Main extends PluginBase implements Listener {
         }
     }
 
-    public function MoveTimeout() {
+    public function moveTimeout() {
         $time = 5;
         $this->getServer()->getScheduler()->scheduleRepeatingTask(new AFKTimeout($this), $time);
+        return true;
 
     }
 
@@ -58,13 +59,16 @@ class Main extends PluginBase implements Listener {
     }
 
     private function enableAFK($p) {
-        $this->afk[] = $p;
+        $this->afk[$p] = $p;
+        return true;
     }
 
     private function disableAFK($p) {
         if (($key = array_search($p, $this->afk)) !== null) {
             unset($this->afk[$key]);
+            return true;
         }
+        return false;
     }
 
     public function hasMoved(Player $p) {
@@ -82,12 +86,14 @@ class Main extends PluginBase implements Listener {
 
     public function setPlayer(Player $p) {
         $this->afk[$p->getName()] = $p;
+        return true;
     }
 
     public function RemovePlayer(Player $p) {
         unset($this->afk[$p->getName()]);
         unset($this->time[$p->getName()]);
         unset($this->pos[$p->getName()]);
+        return true;
     }
 
     public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
@@ -99,21 +105,26 @@ class Main extends PluginBase implements Listener {
                     if ($this->isAFK($name)) {
                         $this->disableAFK($name);
                         $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+                        return true;
                     } else {
                         $this->enableAFK($name);
                         $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                        return true;
                     }
                 } else {
                     $sender->sendMessage(Color::YELLOW . "Console cannot use the AFK command!");
+                    return true;
                 }
             } else {
                 $name = $args[0];
                 if ($this->isAFK($name)) {
                     $this->disableAFK($name);
                     $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is no longer AFK");
+                    return true;
                 } else {
                     $this->enableAFK($name);
                     $this->getServer()->broadcastMessage(Color::YELLOW . $name . " is now AFK");
+                    return true;
                 }
             }
         }
@@ -121,10 +132,12 @@ class Main extends PluginBase implements Listener {
 
     public function setTime(Player $p) {
         $this->time[$p->getName()] = time();
+        return true;
     }
 
     public function setPos(Player $p) {
         $this->pos[$p->getName()] = [round($p->x),round($p->y),round($p->z),$p->getLevel()];
+        return true;
     }
 
     public function checkTime() {
