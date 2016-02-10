@@ -11,7 +11,7 @@ class AFKTimeout extends PluginTask {
 
     public function onRun($currentTick) {
         foreach($this->getOwner()->getServer()->getOnlinePlayers() as $p) {
-            if(!isset($this->plugin->time[$p->getName()])) {
+            if(!isset($this->plugin->time[spl_object_hash($p)])) {
                 $this->plugin->setTime($p);
             }
 
