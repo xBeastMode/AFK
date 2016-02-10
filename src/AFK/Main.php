@@ -12,7 +12,7 @@ use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\event\player\PlayerDropItemEvent;
 
 class Main extends PluginBase implements Listener {
-    public $time;
+    public $time = [];
     public $pos = [];
     private $afk = [];
 
@@ -131,7 +131,7 @@ class Main extends PluginBase implements Listener {
     }
 
     public function setTime(Player $p) {
-        $this->time[$p->getName()] = time();
+        $this->time[spl_object_hash($p)] = time();
         return true;
     }
 
@@ -143,9 +143,8 @@ class Main extends PluginBase implements Listener {
     public function checkTime() {
         if ($this->afk != NULL) {
             foreach ($this->afk as $p) {
-                if (isset($this->time[$p])) {
-                    $name = $p;
-                    $time = $this->time[$name];
+                if (isset($this->time[spl_object_hash($p)])) {
+                    $time = $this->time[spl_object_hash($p)];
                     if (time()-$time>=10) {
                         if ($name instanceof Player) {
                             if ($this->isAFK($name)) {
